@@ -48,7 +48,7 @@ class ContactController extends Controller
     public function actionContactsAsJson()
     {
         $data = Contact::find()->all();
-        return Json::encode($data,JSON_NUMERIC_CHECK);
+        return Json::encode($data);
     }
 
     /**
