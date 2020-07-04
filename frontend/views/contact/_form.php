@@ -17,8 +17,10 @@ use frontend\models\NumberType;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
+    <?php //$form->field($model, 'number_type_id')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'number_type_id')->widget(Select2::classname(), [
-            'data' => NumberType::getListForDropDown(),
+            'data' => NumberType::getListForDropDown() + ['0' => 'add new +'],
             'language' => 'de',
             'options' => ['placeholder' => 'Select a state ...'],
             'pluginOptions' => [
@@ -26,6 +28,10 @@ use frontend\models\NumberType;
             ],
         ]);
     ?>
+
+    <div id="new_number_type_area" class="hidden">
+        <?= $form->field($model, 'new_number_type')->textInput(['maxlength' => true]) ?>
+    </div>
 
     <?= $form->field($model, 'number')->textInput(['maxlength' => true]) ?>
 
@@ -36,3 +42,11 @@ use frontend\models\NumberType;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+$this->registerJs(
+    '
+    
+    '
+);
+?>

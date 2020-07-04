@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use frontend\models\NumberType;
 use Yii;
 use frontend\Models\Contact;
 use frontend\ContactSearch;
@@ -47,6 +48,7 @@ class ContactController extends Controller
 
     public function actionContactsAsJson()
     {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $data = Contact::find()->all();
         return Json::encode($data);
     }
@@ -73,13 +75,43 @@ class ContactController extends Controller
     {
         $model = new Contact();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->number_type_id = $this->getIdOfNumberType(Yii::$app->request->post('Contact')['number_type_id']);
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    private function getIdOfNumberType($title)
+    {
+        $new_number_type = NumberType::findOne(['title' => $title]);
+        if (!$new_number_type) {
+            $new_number_type = new NumberType();
+            $new_number_type->title = $title;
+            $new_number_type->save();
+        }
+        return $new_number_type->id;
+    }
+
+    public function actionTest()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $model = new Contact();
+        $model->attributes = \yii::$app->request->post();
+
+        if($model->validate())
+        {
+            $model->save();
+            return array('status' => true, 'data'=> 'contact record is successfully created.');
+        }
+        else
+        {
+            return array('status'=>false, 'data'=>$model->getErrors());
+        }
     }
 
     /**
