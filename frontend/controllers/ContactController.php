@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use frontend\Models\Contact;
 use frontend\ContactSearch;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -42,6 +43,12 @@ class ContactController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionContactsAsJson()
+    {
+        $data = Contact::find()->all();
+        return Json::encode($data,JSON_NUMERIC_CHECK);
     }
 
     /**

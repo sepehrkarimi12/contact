@@ -35,6 +35,8 @@ class Contact extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 50],
             [['number'], 'string', 'max' => 11],
             [['number_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => NumberType::className(), 'targetAttribute' => ['number_type_id' => 'id']],
+            [['number'], 'match', 'pattern' => '/((\+[0-9]{6})|0)[-]?[0-9]{7}/'],
+            [['number'], 'unique'],
         ];
     }
 
@@ -46,7 +48,7 @@ class Contact extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'number_type_id' => 'Number Type ID',
+            'number_type_id' => 'Number Type',
             'number' => 'Number',
         ];
     }

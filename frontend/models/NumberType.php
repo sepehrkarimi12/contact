@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "tbl_number_type".
@@ -52,5 +53,13 @@ class NumberType extends \yii\db\ActiveRecord
     public function getTblContacts()
     {
         return $this->hasMany(TblContact::className(), ['number_type_id' => 'id']);
+    }
+
+    public static function getListForDropDown()
+    {
+        return ArrayHelper::map(self::find()->all(),'id', 'title');
+//        echo "<pre>";
+//        print_r($list);
+//        die;
     }
 }

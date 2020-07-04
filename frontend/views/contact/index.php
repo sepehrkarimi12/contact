@@ -27,9 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'name',
-            'number_type_id',
+            [
+                    'attribute' => 'number_type_id',
+                    'value' => function($model) {
+                        return $model->numberType->title;
+                    },
+                    'filter' => \frontend\models\NumberType::getListForDropDown()
+            ],
             'number',
 
             ['class' => 'yii\grid\ActionColumn'],
