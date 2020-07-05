@@ -29,7 +29,7 @@ use frontend\models\NumberType;
         ]);
     ?>
 
-    <div id="new_number_type_area" class="hidden">
+    <div id="new_number_type_area" hidden>
         <?= $form->field($model, 'new_number_type')->textInput(['maxlength' => true]) ?>
     </div>
 
@@ -46,7 +46,15 @@ use frontend\models\NumberType;
 <?php
 $this->registerJs(
     '
-    
+        $(\'#contact-number_type_id\').change(function() {
+            if ($(this).val() == 0) {
+                $("#new_number_type_area").show();
+            } else {
+                $("#new_number_type_area").hide();
+                $("#contact-new_number_type").val("");
+            }
+        });
+
     '
 );
 ?>

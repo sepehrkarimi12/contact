@@ -76,7 +76,12 @@ class ContactController extends Controller
         $model = new Contact();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->number_type_id = $this->getIdOfNumberType(Yii::$app->request->post('Contact')['number_type_id']);
+            if (Yii::$app->request->post('Contact')['new_number_type']) {
+                $new_number_type = new NumberType();
+                $new_number_type->title = Yii::$app->request->post('Contact')['new_number_type'];
+                $new_number_type->save();
+                $model->number_type_id = $new_number_type->id;
+            }
             $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -84,17 +89,6 @@ class ContactController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
-    }
-
-    private function getIdOfNumberType($title)
-    {
-        $new_number_type = NumberType::findOne(['title' => $title]);
-        if (!$new_number_type) {
-            $new_number_type = new NumberType();
-            $new_number_type->title = $title;
-            $new_number_type->save();
-        }
-        return $new_number_type->id;
     }
 
     public function actionTest()
